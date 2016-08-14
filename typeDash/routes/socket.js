@@ -1,33 +1,33 @@
-let userNames = () => {
-  let names = [];
+let userNames = {
+  names: [],
 
   // see if you can make these methods es6 arrow functions
-  let claimable = function(name) {
+  claimable: function(name) {
     // indexOf will return -1 for arrays without the value
-    if (names.indexOf(name)<0) {
+    if (this.names.indexOf(name)<0) {
       return false
     }
     return true;
-  }
+  },
 
-  let getName = function() {
+  getName: function() {
     let name = '';
     let nextUserId = 1;
 
     do {
       name = `Guest${nextUserId}`;
       nextUserId += 1;
-    } while (claimable(name));
+    } while (this.claimable(name));
 
-    names.push(name);
+    this.names.push(name);
 
     return name;
-  }
+  },
 
-  let getUsers = function() {
-    return names;
+  getUsers: function() {
+    return this.names;
   }
-}
+};
 
 module.exports = socket => {
   let name = userNames.getName();
