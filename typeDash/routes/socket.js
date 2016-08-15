@@ -10,6 +10,10 @@ let userNames = {
     return true;
   },
 
+  delete: function(name) {
+    this.names.splice(this.names.indexOf(name), 1);
+  },
+
   getName: function() {
     let name = '';
     let nextUserId = 1;
@@ -30,6 +34,8 @@ let userNames = {
 };
 
 module.exports = socket => {
+  // when each user gets a name,
+  // that name is also added to the list of users
   let name = userNames.getName();
 
   socket.emit('init', {
@@ -37,14 +43,17 @@ module.exports = socket => {
     name
   });
 
+  // broadcast notifies all clients
   socket.broadcast.emit('user:join', {
-    name
+    users: userNames.getUsers()
   });
 
 
   socket.on('disconnect', () => {
+    // removes the user from the global list
+    userNames.delete(name);
     socket.broadcast.emit('user:left', {
-      name
+      users: userNames.getUsers()
     })
   })
 }

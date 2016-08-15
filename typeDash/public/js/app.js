@@ -12,25 +12,65 @@ var socket = io.connect();
 var App = _react2['default'].createClass({
   displayName: 'App',
 
+  getInitialState: function getInitialState() {
+    return {
+      users: [],
+      name: ''
+    };
+  },
+
   componentDidMount: function componentDidMount() {
     console.log('chatApp connected');
     socket.on('init', this._initialize);
+    socket.on('user:join', this._userJoined);
+    socket.on('user:left', this._userLeft);
   },
 
   _initialize: function _initialize(data) {
     var users = data.users;
     var name = data.name;
 
-    console.log('Should set the following to state:');
-    console.log('users', users);
-    console.log('name', name);
+    this.setState({ users: users, name: name });
+  },
+
+  _userJoined: function _userJoined(data) {
+    // data is inherited from the emitted object in routes/socket.js
+    console.log('user joined');
+    this.setState({ users: data.users });
+    console.log('users', data.users);
+  },
+
+  _userLeft: function _userLeft(data) {
+    console.log('user left');
+    this.setState({ users: data.users });
+    console.log('users', data.users);
+  },
+
+  renderUserList: function renderUserList(users) {
+    return users.map(function (user) {
+      console.log('user in renderUserList', user);
+      return _react2['default'].createElement(
+        'li',
+        null,
+        user
+      );
+    });
   },
 
   render: function render() {
     return _react2['default'].createElement(
       'div',
       null,
-      'Type Dash'
+      _react2['default'].createElement(
+        'div',
+        null,
+        'Type Dash'
+      ),
+      _react2['default'].createElement(
+        'ul',
+        null,
+        this.renderUserList(this.state.users)
+      )
     );
   }
 });
