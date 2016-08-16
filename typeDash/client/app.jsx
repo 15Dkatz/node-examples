@@ -71,7 +71,7 @@ let App = React.createClass({
       }
     }
 
-    return accuracy;
+    return accuracy < 0 ? 0 : accuracy;
   },
 
 
