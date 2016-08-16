@@ -6,7 +6,7 @@
   "scripts": {
     "build": "browserify ./client/app.jsx -t babelify --outfile ./public/js/app.js",
     "start": "node app.js",
-    "lint": "eslint src"
+    "lint": "eslint public"
   },
   "dependencies": {
     "express": "^4.13.1",
