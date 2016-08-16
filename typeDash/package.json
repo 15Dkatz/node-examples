@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "browserify ./client/app.jsx -t babelify --outfile ./public/js/app.js --fast",
-    "watch": "watchify ./client/app.jsx -t babelify --outfile ./public/js/app.js -dv",
+    "watch": "watchify ./client/app.jsx -t babelify --outfile ./public/js/app.js -dv --fast",
     "start": "node app.js",
     "dev": "npm run build && npm start"
   },
