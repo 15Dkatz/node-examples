@@ -56,4 +56,22 @@ module.exports = socket => {
       users: userNames.getUsers()
     })
   })
+
+  //broadcast a user changing the global text
+  socket.on('change:global_text', (data) => {
+    socket.broadcast.emit('change:global_text', {
+      value: data.value
+    })
+  })
+
+  socket.on('change:guest_text', (data) => {
+    let {value, name} = data;
+    socket.broadcast.emit('change:guest_text', {
+      value,
+      name
+    })
+  })
+
+
+  // change:guest_text
 }

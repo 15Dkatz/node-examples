@@ -1,31 +1,28 @@
-const http = require('http');
-const express = require('express');
+'use strict';
 
-const webpack = require('webpack');
-const config = require('./webpack.config');
-const compiler = webpack(config);
+let express = require('express');
+let http = require('http');
 
-const app = express();
-app.use(require('webpack-dev-middleware')(compiler, {
-  publicPath: config.output.publicPath,
-  hot: true,
-  historyApiFallback: true
-}));
-app.use(require('webpack-hot-middleware')(compiler));
+let socket = require('./routes/socket.js');
+
+let app = express();
+let server = http.createServer(app);
 
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/public'));
 app.set('port', 3000);
 
-const server = new http.Server(app);
+if (process.env.NODE_ENV === 'development') {
+  app.use(express.errorhandler({dumpExceptions: true, showStack: true}));
+}
 
 // Socket.io
-const socket = require('./routes/socket.js');
-const io = require('socket.io').listen(server);
+let io = require('socket.io').listen(server);
 io.sockets.on('connection', socket);
 
+// Starting the server
 server.listen(app.get('port'), () => {
-  console.log(`Express server listening on port ${app.get('port')} in ${app.get('env')} mode`);
+  console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'));
 })
 
 module.exports = app;
