@@ -65,9 +65,11 @@ module.exports = socket => {
   })
 
   socket.on('change:guest_text', (data) => {
-    let {value, name} = data;
+    let {value, accuracy, name} = data;
+    console.log('data in socket.js', data);
     socket.broadcast.emit('change:guest_text', {
       value,
+      accuracy,
       name
     })
   })
